@@ -5,8 +5,14 @@ namespace MiniLocale.Components
 	/// <summary>
 	/// Base component to inherit from for components that will localize a text component type
 	/// </summary>
-	public abstract class LocalizeComponent : MonoBehaviour
+	public abstract class LocalizeComponent<T> : MonoBehaviour where T : MonoBehaviour
 	{
+		/// <summary>
+		/// Target object to localize
+		/// </summary>
+		[SerializeField]
+		protected T target;
+		
 		/// <summary>
 		/// Tag to localize the text with
 		/// </summary>
@@ -16,7 +22,7 @@ namespace MiniLocale.Components
 		/// <summary>
 		/// Has the object been subscribed to localizer events?
 		/// </summary>
-		private bool _subscribed = false;
+		private bool subscribed = false;
 
 		/// <summary>
 		/// Public access to the text tag if required
@@ -47,7 +53,7 @@ namespace MiniLocale.Components
 		/// <summary>
 		/// Localize the text and subscribe to events when object starts
 		/// </summary>
-		private void Start()
+		protected virtual void Start()
 		{
 			Init();
 			Localize();
@@ -57,9 +63,14 @@ namespace MiniLocale.Components
 		/// <summary>
 		/// Unsubscribe from events when object in destroyed
 		/// </summary>
-		private void OnDestroy()
+		protected virtual void OnDestroy()
 		{
 			Unsubscribe();
+		}
+
+		protected virtual void Reset()
+		{
+			if (target == null) target = GetComponent<T>();
 		}
 
 		/// <summary>
@@ -67,9 +78,9 @@ namespace MiniLocale.Components
 		/// </summary>
 		private void Subscribe()
 		{
-			if (_subscribed) return;
+			if (subscribed) return;
 			Localizer.SourceChanged += Localize;
-			_subscribed = true;
+			subscribed = true;
 		}
 
 		/// <summary>
@@ -77,9 +88,9 @@ namespace MiniLocale.Components
 		/// </summary>
 		private void Unsubscribe()
 		{
-			if (!_subscribed) return;
+			if (!subscribed) return;
 			Localizer.SourceChanged -= Localize;
-			_subscribed = false;
+			subscribed = false;
 		}
 	}
 }
