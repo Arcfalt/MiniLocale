@@ -27,14 +27,22 @@ namespace MiniLocale.Components
 		/// <summary>
 		/// Public access to the text tag if required
 		/// </summary>
-		public string Tag => textTag;
+		public string Tag
+		{
+			get => textTag;
+			set
+			{
+				textTag = value;
+				if (subscribed) Localize();
+			}
+		}
 
 		/// <summary>
 		/// Set the text of this object to the given string
-		/// Is called on start and if the language source changes in localizer
+		/// Is called on start and if the language source changes in localizer, or the tag is changed
 		/// </summary>
 		/// <param name="text">String to set the text to</param>
-		public abstract void SetText(string text);
+		protected abstract void SetText(string text);
 
 		/// <summary>
 		/// Init will get called at start before any localize calls
@@ -45,7 +53,7 @@ namespace MiniLocale.Components
 		/// <summary>
 		/// Localize the object
 		/// </summary>
-		public void Localize()
+		private void Localize()
 		{
 			SetText(Localizer.GetString(Tag));
 		}

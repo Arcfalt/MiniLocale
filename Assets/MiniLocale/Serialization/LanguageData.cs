@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace MiniLocale.Serialization
@@ -37,30 +38,24 @@ namespace MiniLocale.Serialization
 			if (string.IsNullOrEmpty(path)) return;
 			Editor.CsvParser.WriteCsv(path, strings);
 		}
-		
-		/// <summary>
-		/// Load strings from a TSV file
-		/// NOTE: TSV does not support line breaks correctly!
-		/// </summary>
-		[ContextMenu("Load From TSV")]
-		public void LoadFromTsv()
-		{
-			var path = UnityEditor.EditorUtility.OpenFilePanelWithFilters("Select Language TSV File", "",
-				new[] {"TSV files", "tsv", "All files", "*"});
-			if (string.IsNullOrEmpty(path)) return;
-			strings = Editor.TsvParser.ParseTsv(path);
-		}
 
-		/// <summary>
-		/// Save the current strings to a TSV file
-		/// NOTE: TSV does not support line breaks correctly!
-		/// </summary>
-		[ContextMenu("Save To TSV")]
-		public void SaveToTsv()
+		[ContextMenu("Strip Duplicates")]
+		public void StripDuplicates()
 		{
-			var path = UnityEditor.EditorUtility.SaveFilePanel("Save Language TSV File", "", "", "tsv");
-			if (string.IsNullOrEmpty(path)) return;
-			Editor.TsvParser.WriteTsv(path, strings);
+			var exists = new List<string>(strings.Length);
+			var s = new List<StringData>(strings);
+			for (int i = 0; i < s.Count; i++)
+			{
+				if (string.IsNullOrEmpty(s[i].tag)) continue;
+				if (!exists.Contains(s[i].tag))
+				{
+					exists.Add(s[i].tag);
+					continue;
+				}
+				s.RemoveAt(i);
+				i--;
+			}
+			strings = s.ToArray();
 		}
 #endif
 	}

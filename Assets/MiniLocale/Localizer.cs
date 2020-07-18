@@ -9,12 +9,12 @@ namespace MiniLocale
 	/// </summary>
 	public static class Localizer
 	{
-		private const string _NO_STRING_FOUND = "";
+		private const string NO_STRING_FOUND = "";
 		
 		/// <summary>
 		/// Currently loaded dictionary of translated strings
 		/// </summary>
-		private static Dictionary<string, string> _strings = new Dictionary<string, string>(0);
+		private static Dictionary<string, string> strings = new Dictionary<string, string>(0);
 
 		/// <summary>
 		/// Simple delegate containing no data for localizer events
@@ -34,8 +34,7 @@ namespace MiniLocale
 		/// <returns>The translated string, null if the tag does not exist in loaded source</returns>
 		public static string GetString(string tag)
 		{
-			string found = "";
-			return _strings.TryGetValue(tag, out found) ? found : _NO_STRING_FOUND;
+			return strings.TryGetValue(tag, out var found) ? found : NO_STRING_FOUND;
 		}
 
 		/// <summary>
@@ -52,10 +51,10 @@ namespace MiniLocale
 			}
 			
 			// Transform the strings into the localizer dictionary
-			_strings = new Dictionary<string, string>(data.strings.Length);
+			strings = new Dictionary<string, string>(data.strings.Length);
 			foreach (var s in data.strings)
 			{
-				_strings.Add(s.tag, s.text);
+				strings.Add(s.tag, s.text);
 			}
 
 			// Raise the event for changing the language source
