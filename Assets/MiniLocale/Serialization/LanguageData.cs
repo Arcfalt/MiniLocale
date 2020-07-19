@@ -22,10 +22,12 @@ namespace MiniLocale.Serialization
 		[ContextMenu("Load From CSV")]
 		public void LoadFromCsv()
 		{
+			UnityEditor.Undo.RecordObject(this, "Load CSV Language Table");
 			var path = UnityEditor.EditorUtility.OpenFilePanelWithFilters("Select Language CSV File", "",
 				new[] {"CSV files", "csv", "All files", "*"});
 			if (string.IsNullOrEmpty(path)) return;
 			strings = Editor.CsvParser.ReadCsv(path);
+			UnityEditor.EditorUtility.SetDirty(this);
 		}
 
 		/// <summary>
@@ -55,7 +57,9 @@ namespace MiniLocale.Serialization
 				s.RemoveAt(i);
 				i--;
 			}
+			UnityEditor.Undo.RecordObject(this, "Strip Duplicate String Tags");
 			strings = s.ToArray();
+			UnityEditor.EditorUtility.SetDirty(this);
 		}
 #endif
 	}
