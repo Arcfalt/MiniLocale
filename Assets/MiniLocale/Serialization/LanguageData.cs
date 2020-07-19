@@ -10,6 +10,8 @@ namespace MiniLocale.Serialization
 	[CreateAssetMenu(fileName = "Language_", menuName = "Language Data", order = 690)]
 	public class LanguageData : ScriptableObject
 	{
+		public string tag;
+		
 		/// <summary>
 		/// Translated string database for this language
 		/// </summary>
@@ -20,7 +22,7 @@ namespace MiniLocale.Serialization
 		/// Load strings from a CSV file
 		/// </summary>
 		[ContextMenu("Load From CSV")]
-		public void LoadFromCsv()
+		public void EditorLoadFromCsv()
 		{
 			UnityEditor.Undo.RecordObject(this, "Load CSV Language Table");
 			var path = UnityEditor.EditorUtility.OpenFilePanelWithFilters("Select Language CSV File", "",
@@ -34,7 +36,7 @@ namespace MiniLocale.Serialization
 		/// Save the current strings to a CSV file
 		/// </summary>
 		[ContextMenu("Save To CSV")]
-		public void SaveToCsv()
+		public void EditorSaveToCsv()
 		{
 			var path = UnityEditor.EditorUtility.SaveFilePanel("Save Language CSV File", "", "", "csv");
 			if (string.IsNullOrEmpty(path)) return;
@@ -42,7 +44,7 @@ namespace MiniLocale.Serialization
 		}
 
 		[ContextMenu("Strip Duplicates")]
-		public void StripDuplicates()
+		public void EditorStripDuplicates()
 		{
 			var exists = new List<string>(strings.Length);
 			var s = new List<StringData>(strings);

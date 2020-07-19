@@ -45,6 +45,12 @@ namespace MiniLocale.Components
 		protected abstract void SetText(string text);
 
 		/// <summary>
+		/// Get the currently displayed text on the target
+		/// </summary>
+		/// <returns>The currently displayed text</returns>
+		public abstract string GetDisplayedText();
+
+		/// <summary>
 		/// Init will get called at start before any localize calls
 		/// </summary>
 		protected virtual void Init()

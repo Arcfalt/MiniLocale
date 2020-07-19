@@ -8,5 +8,10 @@ namespace MiniLocale.Components
 		{
 			target.text = text;
 		}
+
+		public override string GetDisplayedText()
+		{
+			return target.text;
+		}
 	}
 }

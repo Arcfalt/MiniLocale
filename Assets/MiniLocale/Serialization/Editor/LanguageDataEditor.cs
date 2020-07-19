@@ -10,10 +10,12 @@ namespace MiniLocale.Serialization.Editor
 		private const int PER_PAGE = 10;
 		private int page = 0;
 
+		private SerializedProperty culture;
 		private SerializedProperty strings;
 
 		private void OnEnable()
 		{
+			culture = serializedObject.FindProperty("tag");
 			strings = serializedObject.FindProperty("strings");
 		}
 
@@ -28,11 +30,11 @@ namespace MiniLocale.Serialization.Editor
 			EditorGUILayout.BeginHorizontal();
 			if (GUILayout.Button("Import"))
 			{
-				data.LoadFromCsv();
+				data.EditorLoadFromCsv();
 			}
 			if (GUILayout.Button("Export"))
 			{
-				data.SaveToCsv();
+				data.EditorSaveToCsv();
 			}
 			EditorGUILayout.EndHorizontal();
 		}
@@ -47,7 +49,7 @@ namespace MiniLocale.Serialization.Editor
 			GUILayout.Label("Extra Functions", EditorStyles.boldLabel);
 			if (GUILayout.Button("Remove Duplicate Tags"))
 			{
-				data.StripDuplicates();
+				data.EditorStripDuplicates();
 			}
 		}
 
@@ -119,6 +121,8 @@ namespace MiniLocale.Serialization.Editor
 		{
 			// Get and update the base serialized object
 			serializedObject.Update();
+
+			EditorGUILayout.PropertyField(culture);
 			
 			// Draw editor widgets
 			DrawCsvIo();
